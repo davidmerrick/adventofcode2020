@@ -2,12 +2,12 @@ package io.github.davidmerrick.aoc2020.day1
 
 import com.github.shiguruikai.combinatoricskt.combinations
 
-class ExpenseReportPart2Solver(
+class ExpensesCombinatorialSolver(
     private val goalSum: Int,
     private val numOperands: Int
-) {
+) : ExpenseReportSolver {
 
-    fun solve(expenses: List<Int>): Int {
+    override fun solve(expenses: List<Int>): Int {
         val inputs = getInputs(expenses)
         return inputs.reduce { a, b -> a * b }
     }

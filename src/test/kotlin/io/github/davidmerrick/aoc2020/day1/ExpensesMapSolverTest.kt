@@ -3,22 +3,24 @@ package io.github.davidmerrick.aoc2020.day1
 import io.kotlintest.shouldBe
 import org.junit.jupiter.api.Test
 
-class ExpenseReportSolverTest {
+private const val GOAL_SUM = 2020
+
+class ExpensesMapSolverTest {
 
     @Test
-    fun `Solve test input`(){
+    fun `Solve test input with 2 operands`(){
         val expenses = getInputs("day1.txt")
-        val solver = ExpenseReportSolver()
-        val solution = solver.solve(expenses, 2020)
+        val solver = ExpensesMapSolver(GOAL_SUM)
+        val solution = solver.solve(expenses)
         solution shouldBe 514579
     }
 
     @Test
-    fun `Solve full input`(){
+    fun `Solve full input with 2 operands`(){
         val expenses = getInputs("day1-full.txt")
-        val solver = ExpenseReportSolver()
-        val solution = solver.solve(expenses, 2020)
-        println(solution)
+        val solver = ExpensesMapSolver(GOAL_SUM)
+        val solution = solver.solve(expenses)
+        solution shouldBe 121_396
     }
 
 
