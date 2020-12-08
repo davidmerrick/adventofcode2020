@@ -11,6 +11,8 @@ plugins {
 
 dependencies {
 
+  implementation("com.github.shiguruikai:combinatoricskt:1.6.0")
+
   // Test
 
   testImplementation("org.spekframework.spek2:spek-runner-junit5:2.0.8")
