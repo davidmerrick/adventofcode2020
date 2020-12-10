@@ -2,7 +2,6 @@ package io.github.davidmerrick.aoc2020.day3
 
 import io.kotlintest.shouldBe
 import org.junit.jupiter.api.Test
-import kotlin.math.ceil
 
 class TobogganTrajectoryTest {
 
@@ -11,7 +10,8 @@ class TobogganTrajectoryTest {
         val deltaX = 3
         val deltaY = 1
 
-        val treeCount = countTreesForTerrain("day3.txt", deltaX, deltaY)
+        val terrain = parseTerrain("day3.txt")
+        val treeCount = countTreesForTerrain(terrain, deltaX, deltaY)
         treeCount shouldBe 7
     }
 
@@ -20,7 +20,8 @@ class TobogganTrajectoryTest {
         val deltaX = 1
         val deltaY = 1
 
-        val treeCount = countTreesForTerrain("day3.txt", deltaX, deltaY)
+        val terrain = parseTerrain("day3.txt")
+        val treeCount = countTreesForTerrain(terrain, deltaX, deltaY)
         treeCount shouldBe 2
     }
 
@@ -29,7 +30,8 @@ class TobogganTrajectoryTest {
         val deltaX = 5
         val deltaY = 1
 
-        val treeCount = countTreesForTerrain("day3.txt", deltaX, deltaY)
+        val terrain = parseTerrain("day3.txt")
+        val treeCount = countTreesForTerrain(terrain, deltaX, deltaY)
         treeCount shouldBe 3
     }
 
@@ -38,20 +40,21 @@ class TobogganTrajectoryTest {
         val deltaX = 3
         val deltaY = 1
 
-        val treeCount = countTreesForTerrain("day3-full.txt", deltaX, deltaY)
+        val terrain = parseTerrain("day3-full.txt")
+        val treeCount = countTreesForTerrain(terrain, deltaX, deltaY)
 
         treeCount shouldBe 237
     }
 
     @Test
     fun `Handle part 2 example input`(){
-        val fileName = "day3.txt"
+        val terrain = parseTerrain("day3.txt")
         val results = listOf(
-            countTreesForTerrain(fileName, 1, 1),
-            countTreesForTerrain(fileName, 3, 1),
-            countTreesForTerrain(fileName, 5, 1),
-            countTreesForTerrain(fileName, 7, 1),
-            countTreesForTerrain(fileName, 1, 2),
+            countTreesForTerrain(terrain, 1, 1),
+            countTreesForTerrain(terrain, 3, 1),
+            countTreesForTerrain(terrain, 5, 1),
+            countTreesForTerrain(terrain, 7, 1),
+            countTreesForTerrain(terrain, 1, 2),
         )
         val product = results.reduce { a, b -> a * b }
         product shouldBe 336
@@ -59,28 +62,23 @@ class TobogganTrajectoryTest {
 
     @Test
     fun `Handle part 2 full input`(){
-        val fileName = "day3-full.txt"
+        val terrain = parseTerrain("day3-full.txt")
         val results = listOf(
-            countTreesForTerrain(fileName, 1, 1),
-            countTreesForTerrain(fileName, 3, 1),
-            countTreesForTerrain(fileName, 5, 1),
-            countTreesForTerrain(fileName, 7, 1),
-            countTreesForTerrain(fileName, 1, 2),
+            countTreesForTerrain(terrain, 1, 1),
+            countTreesForTerrain(terrain, 3, 1),
+            countTreesForTerrain(terrain, 5, 1),
+            countTreesForTerrain(terrain, 7, 1),
+            countTreesForTerrain(terrain, 1, 2),
         )
         val product = results.reduce { a, b -> a * b }
         product shouldBe 2_106_818_610
     }
 
     private fun countTreesForTerrain(
-        terrainFileName: String,
+        terrain: TobogganTerrain,
         deltaX: Int,
         deltaY: Int
     ): Int {
-        val terrain = parseTerrain(
-            terrainFileName,
-            deltaX,
-            deltaY
-        )
         val path = mutableListOf<TerrainType>()
         var x = 0
         var y = 0
@@ -94,22 +92,10 @@ class TobogganTrajectoryTest {
     }
 
     private fun parseTerrain(
-        fileName: String,
-        deltaX: Int,
-        deltaY: Int
+        fileName: String
     ): TobogganTerrain {
         val input = readLines(fileName)
-        val numRepeats = ((input.size/deltaY)*deltaX)/input[0].length
-        val repeated = (0 .. numRepeats)
-            .map { input.toList() }
-            .reduce { listA, listB ->
-                val newList = mutableListOf<String>()
-                for(i in listA.indices){
-                    newList.add(i, listA[i] + listB[i])
-                }
-                newList.toList()
-            }
-        return TobogganTerrain(repeated)
+        return TobogganTerrain(input)
     }
 
     private fun readLines(fileName: String): List<String> {
