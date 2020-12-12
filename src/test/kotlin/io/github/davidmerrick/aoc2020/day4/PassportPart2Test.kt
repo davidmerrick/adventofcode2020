@@ -17,7 +17,6 @@ class PassportPart2Test {
         val passports = readPassport("day4-full.txt")
         val validCount = passports.count { it.isValid() }
         println(validCount)
-//        validCount shouldBe 4
     }
 
     private fun readPassport(fileName: String): List<PassportPart2> {

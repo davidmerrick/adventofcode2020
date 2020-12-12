@@ -9,7 +9,7 @@ class BoardingPass(input: String) {
 
     val seatId by lazy { (row * 8) + column }
     private fun encodeFromBinary(oneChar: Char, input: String): Int {
-        return input.map { if (it == oneChar) "1" else "0" }
+        return input.map { if (it == oneChar) 1 else 0 }
             .joinToString("")
             .toInt(2)
     }
