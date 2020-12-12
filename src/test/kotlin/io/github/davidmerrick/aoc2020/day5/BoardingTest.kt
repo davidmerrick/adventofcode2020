@@ -32,7 +32,7 @@ class BoardingTest {
     fun `Part 1 input`(){
         val maxId = readLines("day5.txt")
             .map { BoardingPass(it).seatId }
-            .maxOrNull()
+            .max()
         println(maxId)
     }
 
@@ -41,7 +41,7 @@ class BoardingTest {
         val ids = readLines("day5-full.txt")
             .map { BoardingPass(it).seatId }
             .sorted()
-        val seatSet = (ids.minOrNull()!!..ids.maxOrNull()!!)
+        val seatSet = (ids.min()!!..ids.max()!!)
             .toSet()
         val remaining = seatSet.minus(ids.toSet())
             .first()
