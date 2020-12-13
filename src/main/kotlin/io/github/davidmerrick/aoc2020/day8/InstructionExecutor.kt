@@ -37,10 +37,10 @@ class InstructionExecutor(
             when (instruction.operation) {
                 nop -> instructionPointer++
                 acc -> {
-                    _accumulator += instruction.input
+                    _accumulator += instruction.argument
                     instructionPointer++
                 }
-                jmp -> instructionPointer += instruction.input
+                jmp -> instructionPointer += instruction.argument
             }
         }
     }
