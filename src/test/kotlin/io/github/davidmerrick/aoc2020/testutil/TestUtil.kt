@@ -9,4 +9,18 @@ object TestUtil {
             .bufferedReader()
             .readLines()
     }
+
+    /**
+     * Parses input that's line-separated
+     */
+    fun <T: Any> parseInput(
+        thisClass: KClass<out Any>,
+        fileName: String,
+        mapper: (String) -> T
+    ): List<T>{
+        return thisClass.java.getResourceAsStream(fileName)
+            .bufferedReader()
+            .readLines()
+            .map(mapper)
+    }
 }
