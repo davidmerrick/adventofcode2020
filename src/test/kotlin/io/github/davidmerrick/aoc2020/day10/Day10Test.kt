@@ -44,10 +44,16 @@ class Day10Test {
     fun `Part 2 with example input`(){
         val adapters = parseAdapters("day10.txt")
         val graph = JoltageGraph(adapters)
-        val paths = graph.nodes.filter { it.value.size > 1 }
-            .map { it.value.size }
-            .sum()
-        println(paths)
+        val pathsCount = graph.distinctPaths(adapters[0], adapters[adapters.size - 1])
+        pathsCount shouldBe 19_208L
+    }
+
+    @Test
+    fun `Part 2 with full input`(){
+        val adapters = parseAdapters("day10-full.txt")
+        val graph = JoltageGraph(adapters)
+        val pathsCount = graph.distinctPaths(adapters[0], adapters[adapters.size - 1])
+        println(pathsCount)
     }
 
     private fun parseAdapters(fileName: String): List<Int> {
