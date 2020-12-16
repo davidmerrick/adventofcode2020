@@ -6,10 +6,11 @@ class JoltageGraph(
     private val adapters: List<Int>
 ) {
     private val nodes: Map<Int, Set<Int>>
+    private val visited: MutableMap<Int, Long> = mutableMapOf()
 
     init {
         var nodesMap = mutableMapOf<Int, Set<Int>>()
-        for(i in (0 until adapters.size-1)){
+        for (i in (0 until adapters.size - 1)) {
             val currentAdapter = adapters[i]
             nodesMap[currentAdapter] = getValidAdapters(currentAdapter)
         }
@@ -17,12 +18,16 @@ class JoltageGraph(
     }
 
     fun distinctPaths(source: Int, dest: Int): Long {
-        if(source == dest){
+        if (source == dest) {
             return 1L
         }
-        return nodes[source]!!
-            .map { distinctPaths(it, dest) }
-            .sum()
+        if (!visited.containsKey(source)) {
+            visited[source] = nodes[source]!!
+                .map { distinctPaths(it, dest) }
+                .sum()
+        }
+
+        return visited[source]!!
     }
 
     private fun getValidAdapters(value: Int): Set<Int> {
