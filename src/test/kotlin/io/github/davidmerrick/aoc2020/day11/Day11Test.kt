@@ -148,7 +148,7 @@ class Day11Test {
         val occupiedCount = currentGrid.seats.asSequence()
             .flatten()
             .count { it == OCCUPIED }
-        println(occupiedCount)
+        occupiedCount shouldBe 2285
     }
 
     private val part2Rules = fun(grid: SeatGrid, x: Int, y: Int): SeatType {

@@ -26,13 +26,13 @@ class SeatGrid(private val _input: List<List<SeatType>>) {
             // Down
             getVisibleSeatsInDirection(x, y, 0, -1),
             // Upper left
-            getVisibleSeatsInDirection(x, y, -1, 1),
-            // Upper right
-            getVisibleSeatsInDirection(x, y, 1, 1),
-            // Lower left
             getVisibleSeatsInDirection(x, y, -1, -1),
+            // Upper right
+            getVisibleSeatsInDirection(x, y, 1, -1),
+            // Lower left
+            getVisibleSeatsInDirection(x, y, -1, 1),
             // Lower right
-            getVisibleSeatsInDirection(x, y, 1, -1)
+            getVisibleSeatsInDirection(x, y, 1, 1)
         ).mapNotNull { it }
     }
 
