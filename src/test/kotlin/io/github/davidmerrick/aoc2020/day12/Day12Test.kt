@@ -49,21 +49,33 @@ class Day12Test {
 
     @Test
     fun `Part 2 Test`(){
-        val ship = ShipPart2(EAST)
+        val ship = ShipPart2()
         ship.handle(NavInstruction(NavAction.F, 10))
         ship.x shouldBe 100
         ship.y shouldBe 10
         ship.handle(NavInstruction(NavAction.N, 3))
-        ship.wayPointX shouldBe 110
-        ship.wayPointY shouldBe 14
+        ship.wayPointX shouldBe 10
+        ship.wayPointY shouldBe 4
         ship.handle(NavInstruction(NavAction.F, 7))
         ship.x shouldBe 170
         ship.y shouldBe 38
-        ship.wayPointX shouldBe 180
-        ship.wayPointY shouldBe 42
+        ship.wayPointX shouldBe 10
+        ship.wayPointY shouldBe 4
         ship.handle(NavInstruction(NavAction.R, 90))
-        ship.wayPointX shouldBe 106
-        ship.wayPointY shouldBe 28
+        ship.wayPointX shouldBe 4
+        ship.wayPointY shouldBe -10
+        ship.handle(NavInstruction(NavAction.F, 11))
+        ship.x shouldBe 214
+        ship.y shouldBe -72
+        ship.distance shouldBe 286
+    }
+
+    @Test
+    fun `Part 2 full`(){
+        val ship = ShipPart2()
+        parseInput("day12-full.txt")
+            .forEach { ship.handle(it) }
+        println(ship.distance)
     }
 
     private fun parseInput(fileName: String): List<NavInstruction> {

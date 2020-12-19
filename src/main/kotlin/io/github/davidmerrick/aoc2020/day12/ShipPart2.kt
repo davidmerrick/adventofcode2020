@@ -18,7 +18,10 @@ import kotlin.math.abs
  * Positive y = north
  * Positive x = east
  */
-class ShipPart2(initialDirection: ShipDirection = EAST) {
+class ShipPart2 {
+
+    // Note: Waypoint coordinates are always
+    // relative to ship
     private val wayPoint = WayPoint(10, 1)
     val x: Int
         get() = _x
@@ -65,7 +68,7 @@ class ShipPart2(initialDirection: ShipDirection = EAST) {
         } else {
             rotations[360 - degrees]
         }!!
-        val result = formula(wayPoint.x, wayPoint.y, _x, _y)
+        val result = formula(wayPoint.x, wayPoint.y)
         wayPoint.x = result.first
         wayPoint.y = result.second
     }
@@ -74,20 +77,14 @@ class ShipPart2(initialDirection: ShipDirection = EAST) {
     // a and b are x and y coords of ship, respectively
     // Formulas from https://www.khanacademy.org/math/geometry-home/transformations/geo-rotations/v/rotating-about-arbitrary-point#:~:text=A%20point%20(a%2C%20b)%20rotated%20around%20a%20point%20(,%2D%20x)%20%2B%20y).
     private val rotations = mapOf(
-        90 to { a: Int, b: Int, x: Int, y: Int -> Pair(-b + y + x, a - x + y) },
-        180 to { a: Int, b: Int, x: Int, y: Int -> Pair(-1 * (a - x) + x, -1 * (b - y) + y) },
-        270 to { a: Int, b: Int, x: Int, y: Int -> Pair((b - y) + x, -(a - x) + y) },
+        90 to { x: Int, y: Int -> Pair(y, -x) },
+        180 to { x: Int, y: Int -> Pair(-x, -y) },
+        270 to { x: Int, y: Int -> Pair(x, -y) },
     )
 
     private fun moveShip(value: Int) {
-        val wayPointDiffX = wayPoint.x - _x
-        _x += wayPointDiffX * value
-        val wayPointDiffY = wayPoint.y - _y
-        _y += wayPointDiffY * value
-
-        // Waypoint moves with ship
-        wayPoint.x = x + wayPointDiffX
-        wayPoint.y = y + wayPointDiffY
+        _x += wayPoint.x * value
+        _y += wayPoint.y * value
     }
 
     private fun moveWayPoint(direction: ShipDirection, value: Int) {
@@ -100,13 +97,6 @@ class ShipPart2(initialDirection: ShipDirection = EAST) {
     }
 
     companion object {
-        private val shipDirections = listOf(
-            NORTH,
-            EAST,
-            SOUTH,
-            WEST
-        )
-
         private val actionToDirection = mapOf(
             N to NORTH,
             E to EAST,
