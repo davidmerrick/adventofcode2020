@@ -47,6 +47,25 @@ class Day12Test {
         println(ship.distance)
     }
 
+    @Test
+    fun `Part 2 Test`(){
+        val ship = ShipPart2(EAST)
+        ship.handle(NavInstruction(NavAction.F, 10))
+        ship.x shouldBe 100
+        ship.y shouldBe 10
+        ship.handle(NavInstruction(NavAction.N, 3))
+        ship.wayPointX shouldBe 110
+        ship.wayPointY shouldBe 14
+        ship.handle(NavInstruction(NavAction.F, 7))
+        ship.x shouldBe 170
+        ship.y shouldBe 38
+        ship.wayPointX shouldBe 180
+        ship.wayPointY shouldBe 42
+        ship.handle(NavInstruction(NavAction.R, 90))
+        ship.wayPointX shouldBe 106
+        ship.wayPointY shouldBe 28
+    }
+
     private fun parseInput(fileName: String): List<NavInstruction> {
         return TestUtil.parseInput(this::class, fileName){
             NavInstruction(
