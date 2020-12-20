@@ -79,7 +79,7 @@ class ShipPart2 {
     private val rotations = mapOf(
         90 to { x: Int, y: Int -> Pair(y, -x) },
         180 to { x: Int, y: Int -> Pair(-x, -y) },
-        270 to { x: Int, y: Int -> Pair(x, -y) },
+        270 to { x: Int, y: Int -> Pair(-y, x) },
     )
 
     private fun moveShip(value: Int) {

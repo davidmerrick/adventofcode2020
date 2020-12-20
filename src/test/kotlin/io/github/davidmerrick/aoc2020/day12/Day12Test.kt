@@ -71,6 +71,25 @@ class Day12Test {
     }
 
     @Test
+    fun `Part 2 Test 2`(){
+        val ship = ShipPart2()
+        ship.handle(NavInstruction(NavAction.F, 10))
+        ship.x shouldBe 100
+        ship.y shouldBe 10
+        ship.handle(NavInstruction(NavAction.N, 3))
+        ship.wayPointX shouldBe 10
+        ship.wayPointY shouldBe 4
+        ship.handle(NavInstruction(NavAction.F, 7))
+        ship.x shouldBe 170
+        ship.y shouldBe 38
+        ship.wayPointX shouldBe 10
+        ship.wayPointY shouldBe 4
+        ship.handle(NavInstruction(NavAction.L, 90))
+        ship.wayPointX shouldBe -4
+        ship.wayPointY shouldBe 10
+    }
+
+    @Test
     fun `Part 2 full`(){
         val ship = ShipPart2()
         parseInput("day12-full.txt")
