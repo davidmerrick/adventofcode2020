@@ -12,6 +12,7 @@ plugins {
 dependencies {
 
   implementation("com.github.shiguruikai:combinatoricskt:1.6.0")
+  implementation("com.google.guava:guava:30.1-jre")
 
   // Test
 

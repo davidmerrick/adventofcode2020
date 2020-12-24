@@ -1,18 +1,36 @@
 package io.github.davidmerrick.aoc2020.day15
 
-object Day15Solver {
-    fun solve(input: List<Int>, stop: Int = 2020): Int {
-        val spoken = mutableListOf<Int>()
-        spoken.addAll(input)
-        for (i in input.size until stop){
-            val lastSpoken = spoken.last()
-            val toSpeak = if(spoken.count { it == lastSpoken } == 1){
+import com.google.common.collect.EvictingQueue
+
+class Day15Solver(private val input: List<Int>) {
+
+    private val lookbacks = mutableMapOf<Int, EvictingQueue<Int>>()
+
+    fun solve(stop: Int = 2020): Int {
+        initLookbacks()
+        var lastSpoken = input.last()
+        for (i in input.size until stop) {
+            val toSpeak = if (lookbacks[lastSpoken]?.size == 1) {
                 0
             } else {
-                i - (spoken.subList(0, i-1).lastIndexOf(lastSpoken) + 1)
+                i - (lookbacks[lastSpoken]!!.first() + 1)
             }
-            spoken.add(toSpeak)
+            lastSpoken = toSpeak
+            updateLookbacks(i, lastSpoken)
         }
-        return spoken.last()
+        return lastSpoken
+    }
+
+    private fun initLookbacks() {
+        lookbacks.clear()
+        input.forEachIndexed { i, value -> updateLookbacks(i, value) }
+    }
+
+    private fun updateLookbacks(index: Int, value: Int) {
+        lookbacks.compute(value) { _, v ->
+            val queue = v ?: EvictingQueue.create(2)
+            queue.add(index)
+            queue
+        }
     }
 }
