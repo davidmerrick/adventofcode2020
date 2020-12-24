@@ -34,8 +34,9 @@ class Day13Part2Test {
     @Test
     fun `Example 1`(){
         val congruences = parseLine("17,x,13,19")
-        val result = CrtSolver(congruences).solve()
-        result shouldBe 3417
+        val solver = CrtSolver(congruences)
+        val result = solver.solve()
+        solver.product - result shouldBe 3417
     }
 
     @Test
@@ -43,35 +44,47 @@ class Day13Part2Test {
         val congruences = parseLine("67,7,59,61")
         val solver = CrtSolver(congruences)
         val result = solver.solve()
-        result shouldBe 754018
+        solver.product - result shouldBe 754018
     }
 
     @Test
     fun `Example 3`(){
         val congruences = parseLine("67,x,7,59,61")
-        val result = CrtSolver(congruences).solve()
-        result shouldBe 779210
+        val solver = CrtSolver(congruences)
+        val result = solver.solve()
+        solver.product - result shouldBe 779210
     }
 
     @Test
     fun `Example 4`(){
         val congruences = parseLine("67,7,x,59,61")
-        val result = CrtSolver(congruences).solve()
-        result shouldBe 1261476
+        val solver = CrtSolver(congruences)
+        val result = solver.solve()
+        solver.product - result shouldBe 1261476
     }
 
     @Test
     fun `Example 5`(){
         val congruences = parseLine("1789,37,47,1889")
-        val time = CrtSolver(congruences).solve()
-        time shouldBe 1202161486
+        val solver = CrtSolver(congruences)
+        val result = solver.solve()
+        solver.product - result shouldBe 1202161486
     }
 
     @Test
     fun `Example test`() {
         val congruences = parseInput("day13.txt")
-        val time = CrtSolver(congruences).solve()
-        time shouldBe 1_068_781
+        val solver = CrtSolver(congruences)
+        val result = solver.solve()
+        solver.product - result shouldBe 1_068_781
+    }
+
+    @Test
+    fun `Full input`() {
+        val congruences = parseInput("day13-full.txt")
+        val solver = CrtSolver(congruences)
+        val result = solver.solve()
+        println(solver.product - result)
     }
 
     private fun parseInput(fileName: String): List<Congruence> {
@@ -83,10 +96,9 @@ class Day13Part2Test {
         return line.split(",")
             .mapIndexed { i, value ->
                 if (value != "x") {
-                    Congruence(value.toLong(), i.toLong())
+                    Congruence(i.toLong(), value.toLong())
                 } else null
             }
             .filterNotNull()
-            .filterNot { it.mod == 0L }
     }
 }

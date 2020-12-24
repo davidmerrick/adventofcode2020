@@ -26,7 +26,7 @@ class CrtSolver(private val congruences: List<Congruence>) {
          * Compute partial product
          */
         fun partialProduct(product: Long, congruence: Congruence): Long {
-            return product/congruence.mod
+            return product / congruence.mod
         }
 
         /**
@@ -35,10 +35,11 @@ class CrtSolver(private val congruences: List<Congruence>) {
          * https://www.geeksforgeeks.org/multiplicative-inverse-under-modulo-m/
          */
         fun inverse(partialProduct: Long, value: Long): Long {
+            if (value == 1L) return 1
             val a = partialProduct % value
             return (1..partialProduct).firstOrNull {
                 (a * it) % value == 1L
-            } ?: 1L
+            } ?: 1
         }
     }
 }
