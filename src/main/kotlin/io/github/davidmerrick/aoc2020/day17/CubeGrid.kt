@@ -1,40 +1,86 @@
 package io.github.davidmerrick.aoc2020.day17
 
+import io.github.davidmerrick.aoc2020.day17.CubeState.ACTIVE
 import io.github.davidmerrick.aoc2020.day17.CubeState.INACTIVE
 
 class CubeGrid(private val input: List<List<List<CubeState>>>) {
 
-    // Todo: May want to transform input to pad it with inactive cubes
-
     val activeCount: Int
-        get() = input.flatMap { it.flatten() }
-            .count { it == CubeState.ACTIVE }
+        get() = input.flatten().flatten()
+            .count { it == ACTIVE }
 
     /**
      * Transition to next state
      */
     fun cycle(): CubeGrid {
-        TODO()
+        // Check every cube's neighbors and transition them
+        val newInput: MutableList<List<List<CubeState>>> = mutableListOf()
+        for (z in -1..input.size) {
+            val newY = mutableListOf<List<CubeState>>()
+            for (y in -1..input[0].size) {
+                val newX = mutableListOf<CubeState>()
+                for (x in -1..input[0][0].size) {
+                    newX.add(nextState(x, y, z))
+                }
+                newY.add(newX)
+            }
+            newInput.add(newY)
+        }
+
+        // Return a new grid with the transformed input
+        return CubeGrid(newInput.toList())
     }
 
-    private fun getAt(x: Int, y: Int, z: Int) = input[z][y][x]
+    private fun nextState(x: Int, y: Int, z: Int): CubeState {
+        val neighbors = getNeighbors(x, y, z)
+        val currentState = getAt(x, y, z)
+        return if (currentState == ACTIVE) {
+            if (neighbors.count { it == ACTIVE } in 2..3) {
+                ACTIVE
+            } else INACTIVE
+        } else {
+            if (neighbors.count { it == ACTIVE } == 3) {
+                ACTIVE
+            } else INACTIVE
+        }
+
+    }
+
+    private fun getAt(x: Int, y: Int, z: Int) = if (inBounds(x, y, z)) {
+        input[z][y][x]
+    } else INACTIVE
 
     fun getNeighbors(x: Int, y: Int, z: Int): List<CubeState> {
         val neighbors = mutableListOf<CubeState>()
-        for (zprime in (z - 1..z + 1)) {
-            for (yprime in (y - 1..y + 1)) {
-                for (xprime in (x - 1..x + 1)) {
-                    val value = if (inBounds(xprime, yprime, zprime)) {
-                        getAt(xprime, yprime, zprime)
-                    } else INACTIVE
-                    neighbors.add(value)
-                }
-            }
+        walkInput(
+            (x - 1..x + 1).toList(),
+            (y - 1..y + 1).toList(),
+            (z - 1..z + 1).toList()
+        ) { xPrime, yPrime, zPrime ->
+            val value = if (inBounds(xPrime, yPrime, zPrime)) {
+                getAt(xPrime, yPrime, zPrime)
+            } else INACTIVE
+            neighbors.add(value)
         }
 
         // Remove cube itself from list
         neighbors.remove(getAt(x, y, z))
         return neighbors.toList()
+    }
+
+    private fun walkInput(
+        xRange: List<Int>,
+        yRange: List<Int>,
+        zRange: List<Int>,
+        action: (Int, Int, Int) -> Unit
+    ) {
+        for (z in zRange) {
+            for (y in yRange) {
+                for (x in xRange) {
+                    action(x, y, z)
+                }
+            }
+        }
     }
 
     /**
