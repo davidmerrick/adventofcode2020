@@ -6,7 +6,7 @@ private const val MASK_SIZE = 36
 class BitMask(private val value: String) {
 
     fun apply(input: String): Long {
-        var output: String = ""
+        var output = ""
         for(i in value.indices){
             output += if(value[i] != IGNORE_CHAR){
                 // Use the mask value if set

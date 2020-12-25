@@ -13,7 +13,7 @@ class Day15Solver(private val input: List<Int>) {
             val toSpeak = if (lookbacks[lastSpoken]?.size == 1) {
                 0
             } else {
-                i - (lookbacks[lastSpoken]!!.first() + 1)
+                (i - 1) - lookbacks[lastSpoken]!!.first()
             }
             lastSpoken = toSpeak
             updateLookbacks(i, lastSpoken)
