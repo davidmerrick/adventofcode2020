@@ -14,4 +14,11 @@ object Day17Parser {
         }
         return CubeGrid(listOf(initialGrid))
     }
+
+    fun parse4d(fileName: String): CubeGrid4d {
+        val initialGrid = TestUtil.parseInput(this::class, fileName) { line ->
+            line.map { if (it == ACTIVE_CHAR) ACTIVE else INACTIVE }
+        }
+        return CubeGrid4d(listOf(listOf(initialGrid)))
+    }
 }
