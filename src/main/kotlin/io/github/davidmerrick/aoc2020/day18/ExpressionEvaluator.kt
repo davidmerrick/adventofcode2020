@@ -1,5 +1,6 @@
 package io.github.davidmerrick.aoc2020.day18
 
+import java.lang.RuntimeException
 import java.util.Stack
 
 
@@ -23,7 +24,7 @@ object ExpressionEvaluator {
             when (i) {
                 '(' -> stack.push(i)
                 ')' -> {
-                    while (!stack.isEmpty() && stack.peek() != '(') {
+                    while (!stack.isEmpty()) {
                         val stackTop = stack.pop()
                         if (stackTop == '(') break
                         output.add(stackTop)
@@ -33,9 +34,8 @@ object ExpressionEvaluator {
                     if (stack.isEmpty()) {
                         // Do nothing
                     } else {
-                        while (!stack.isEmpty()) {
+                        while (!stack.isEmpty() && stack.peek() != '(') {
                             val stackTop = stack.pop()
-                            if (stackTop == '(') break
                             output.add(stackTop)
                         }
                     }
@@ -51,11 +51,11 @@ object ExpressionEvaluator {
         return output
     }
 
-    fun evaluatePostFix(input: List<Char>): Int {
-        val stack = Stack<Int>()
+    fun evaluatePostFix(input: List<Char>): Long {
+        val stack = Stack<Long>()
         for (i in input) {
             if (i.isDigit()) {
-                stack.push(Character.getNumericValue(i))
+                stack.push(Character.getNumericValue(i).toLong())
                 continue
             }
             if (i in listOf('*', '+')) {

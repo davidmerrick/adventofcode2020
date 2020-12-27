@@ -23,6 +23,13 @@ class Day18Test {
     }
 
     @Test
+    fun `Example 2`() {
+        val input = parse("2 * 3 + (4 * 5)")
+        val postFix = ExpressionEvaluator.toPostFix(input)
+        ExpressionEvaluator.evaluatePostFix(postFix) shouldBe 26
+    }
+
+    @Test
     fun `Basic parens case`() {
         val input = parse("5 + (8 * 3 + 9)")
         val postFix = ExpressionEvaluator.toPostFix(input)
@@ -33,20 +40,36 @@ class Day18Test {
     }
 
     @Test
-    fun `Example 2`() {
+    fun `Example 3`() {
         val input = parse("5 + (8 * 3 + 9 + 3 * 4 * 3)")
         val postFix = ExpressionEvaluator.toPostFix(input)
         postFix.size shouldBe 13
-        postFix shouldBe listOf('5', '8', '3', '*', '9', '+', '3', '+', '4', '*', '+')
+        postFix shouldBe listOf('5', '8', '3', '*', '9', '+', '3', '+', '4', '*', '3', '*', '+')
 
         ExpressionEvaluator.evaluatePostFix(postFix) shouldBe 437
+    }
+
+    @Test
+    fun `Example 4`() {
+        val input = parse("5 * 9 * (7 * 3 * 3 + 9 * 3 + (8 + 6 * 4))")
+        val postFix = ExpressionEvaluator.toPostFix(input)
+
+        ExpressionEvaluator.evaluatePostFix(postFix) shouldBe 12_240
+    }
+
+    @Test
+    fun `Example 5`() {
+        val input = parse("((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 2 + 4 * 2")
+        val postFix = ExpressionEvaluator.toPostFix(input)
+
+        ExpressionEvaluator.evaluatePostFix(postFix) shouldBe 13_632
     }
 
     @Test
     fun `Part 1`() {
         val result = TestUtil.parseInput(this::class, "day18.txt") {
             val postFix = ExpressionEvaluator.toPostFix(parse(it))
-            ExpressionEvaluator.evaluatePostFix(postFix)
+            ExpressionEvaluator.evaluatePostFix(postFix).toLong()
         }.sum()
         println(result)
     }
