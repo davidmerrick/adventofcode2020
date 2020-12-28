@@ -69,7 +69,7 @@ class Day18Test {
     fun `Part 1`() {
         val result = TestUtil.parseInput(this::class, "day18.txt") {
             val postFix = ExpressionEvaluator.toPostFix(parse(it))
-            ExpressionEvaluator.evaluatePostFix(postFix).toLong()
+            ExpressionEvaluator.evaluatePostFix(postFix)
         }.sum()
         println(result)
     }
