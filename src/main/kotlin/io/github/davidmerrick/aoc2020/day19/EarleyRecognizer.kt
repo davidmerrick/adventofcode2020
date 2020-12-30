@@ -26,18 +26,18 @@ class EarleyRecognizer(private val grammar: Set<Rule>) {
         // Loop over input
         for (i in input.indices) {
             val stateSet = getStateSet(i)
-            var k = 0
-            while (k < stateSet.size) {
-                if (stateSet[k].isComplete) {
-                    completer(stateSet[k], k)
+            var j = 0
+            while (j < stateSet.size) {
+                if (stateSet[j].isComplete) {
+                    completer(stateSet[j], j)
                 } else {
-                    if (stateSet.getOrNull(k)?.rule?.isTerminal == true) {
-                        scanner(input[i], stateSet[k], k)
+                    if (stateSet.getOrNull(j)?.rule?.isTerminal == true) {
+                        scanner(input[i], stateSet[j], i)
                     } else {
-                        predictor(stateSet[k], k)
+                        predictor(stateSet[j], i)
                     }
                 }
-                k++
+                j++
             }
         }
 
@@ -61,7 +61,10 @@ class EarleyRecognizer(private val grammar: Set<Rule>) {
      * If it does, we add this item (advanced one step) to the next state set.
      */
     private fun scanner(input: Char, state: EarleyState, k: Int) {
-        TODO()
+        if(state.rule.productions[state.fatDot] == input){
+            val newItem = state.copy(fatDot = state.fatDot + 1)
+            addStateItem(newItem, k + 1)
+        }
     }
 
     /**
@@ -76,7 +79,7 @@ class EarleyRecognizer(private val grammar: Set<Rule>) {
 
     private fun addStateItem(state: EarleyState, k: Int) {
         if (k == earleyStateSets.size) {
-            earleyStateSets.add(k, mutableListOf())
+            earleyStateSets.add(mutableListOf())
         }
         if (!earleyStateSets[k].contains(state)) {
             earleyStateSets[k].add(state)
