@@ -16,6 +16,8 @@ Few options for parsing CFGs:
 * Earley parser
 
 I chose the Earley parser, mostly because I wasn't familiar with it.
+But it's also very efficient. It can run in linear time on deterministic context-free grammars.
 
 Helpful references:
+* https://loup-vaillant.fr/tutorials/earley-parsing/
 * https://joshuagrams.github.io/pep/
