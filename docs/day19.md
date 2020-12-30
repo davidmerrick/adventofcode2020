@@ -16,3 +16,6 @@ Few options for parsing CFGs:
 * Earley parser
 
 I chose the Earley parser, mostly because I wasn't familiar with it.
+
+Helpful references:
+* https://joshuagrams.github.io/pep/

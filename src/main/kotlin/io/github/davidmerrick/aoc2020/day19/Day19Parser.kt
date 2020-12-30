@@ -16,7 +16,17 @@ class Day19Parser(private val input: String) {
 
         // Handle "or" case in rules
         return split[1].split("|")
-            .map { Rule(ruleId, it.trim()) }
+            .map { ruleString ->
+                if (isTerminal(ruleString)) {
+                    Rule(ruleId, emptyList(), ruleString[1])
+                } else {
+                    Rule(ruleId, ruleString.filterNot { it == ' ' }.map { Character.getNumericValue(it) })
+                }
+            }
+    }
+
+    private fun isTerminal(ruleString: String): Boolean {
+        return ruleString.contains("\"")
     }
 
     fun parseMessages(): List<String> {

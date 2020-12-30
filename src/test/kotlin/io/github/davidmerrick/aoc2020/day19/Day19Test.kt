@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 class Day19Test {
 
     @Test
-    fun `Parse input`(){
+    fun `Parse input`() {
         val input = TestUtil.readText(this::class, "example.txt")
         val parser = Day19Parser(input)
         val messages = parser.parseMessages()
