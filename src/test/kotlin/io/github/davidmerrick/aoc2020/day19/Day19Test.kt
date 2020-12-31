@@ -21,6 +21,28 @@ class Day19Test {
     }
 
     @Test
+    fun `Part 1`() {
+        val input = TestUtil.readText(this::class, "part1.txt")
+        val parser = Day19Parser(input)
+        val messages = parser.parseMessages()
+        val rules = parser.parseRules()
+
+        val validator = EarleyRecognizer(rules)
+        println(messages.count { validator.isValid(it) })
+    }
+
+    @Test
+    fun `Part 2`() {
+        val input = TestUtil.readText(this::class, "part2.txt")
+        val parser = Day19Parser(input)
+        val messages = parser.parseMessages()
+        val rules = parser.parseRules()
+
+        val validator = EarleyRecognizer(rules)
+        println(messages.count { validator.isValid(it) })
+    }
+
+    @Test
     fun `Rule test`() {
         Rule("1", listOf("a")).isTerminal shouldBe true
         Rule("1", listOf("1", "2")).isTerminal shouldBe false

@@ -21,3 +21,4 @@ But it's also very efficient. It can run in linear time on deterministic context
 Helpful references:
 * https://loup-vaillant.fr/tutorials/earley-parsing/
 * https://joshuagrams.github.io/pep/
+* https://loup-vaillant.fr/tutorials/earley-parsing/recogniser
