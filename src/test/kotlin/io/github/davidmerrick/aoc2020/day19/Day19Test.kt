@@ -19,8 +19,8 @@ class Day19Test {
 
     @Test
     fun `Rule test`() {
-        Rule(1, listOf('a')).isTerminal shouldBe true
-        Rule(1, listOf('1', '2')).isTerminal shouldBe false
+        Rule("1", listOf("a")).isTerminal shouldBe true
+        Rule("1", listOf("1", "2")).isTerminal shouldBe false
     }
 
     @Test
@@ -29,13 +29,13 @@ class Day19Test {
             0: 1 2 3
             1: "a"
             2: "b"
-            3: "c"
+            3: "b"
         """.trimIndent()
         val parser = Day19Parser(input)
         val rules = parser.parseRules()
 
         val validator = EarleyRecognizer(rules)
-        validator.isValid("abc") shouldBe true
+        validator.isValid("abb") shouldBe true
         validator.isValid("bac") shouldBe false
     }
 }

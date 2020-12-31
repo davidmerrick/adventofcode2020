@@ -13,7 +13,7 @@ class Day19Parser(private val input: String) {
 
     private fun parseRulesLine(line: String): List<Rule> {
         val split = line.split(": ")
-        val ruleId = split[0].toInt()
+        val ruleId = split[0]
 
         // Handle "or" case in rules
         return split[1].split("|")
@@ -21,8 +21,8 @@ class Day19Parser(private val input: String) {
                 Rule(
                     ruleId,
                     ruleString.replace("\"", "")
-                        .filterNot { it == ' ' }
-                        .map { it }
+                        .split(" ")
+                        .toList()
                 )
             }
     }

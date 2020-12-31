@@ -1,8 +1,8 @@
 package io.github.davidmerrick.aoc2020.day19
 
 data class Rule(
-    val id: Int,
-    val productions: List<Char>
+    val id: String,
+    val productions: List<String>
 ) {
-    val isTerminal = !productions[0].isDigit()
+    val isTerminal = productions[0] in listOf("a", "b")
 }
