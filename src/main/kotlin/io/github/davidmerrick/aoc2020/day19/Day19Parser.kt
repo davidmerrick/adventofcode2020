@@ -22,6 +22,7 @@ class Day19Parser(private val input: String) {
                     ruleId,
                     ruleString.replace("\"", "")
                         .split(" ")
+                        .filterNot { it.isEmpty() }
                         .toList()
                 )
             }

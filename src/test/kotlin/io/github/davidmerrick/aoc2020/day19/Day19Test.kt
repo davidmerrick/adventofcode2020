@@ -15,6 +15,9 @@ class Day19Test {
 
         val rules = parser.parseRules()
         rules.size shouldBe 9
+
+        val validator = EarleyRecognizer(rules)
+        messages.count { validator.isValid(it) } shouldBe 2
     }
 
     @Test
