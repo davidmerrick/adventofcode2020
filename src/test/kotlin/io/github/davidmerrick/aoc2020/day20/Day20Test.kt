@@ -42,4 +42,13 @@ class Day20Test {
         val result = corners.map { it.id.toLong() }.reduce { a, b -> a * b }
         println(result)
     }
+
+    @Test
+    fun `Part 2`(){
+        // Parse tiles into an image
+        val tiles = TestUtil.readText(this::class, "part1.txt")
+                .split("\n\n").map { Tile.parse(it) }
+        val image = Image(tiles)
+
+    }
 }

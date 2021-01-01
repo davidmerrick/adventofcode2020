@@ -1,6 +1,13 @@
 package io.github.davidmerrick.aoc2020.day20
 
-data class Tile(val id: Int, val pixels: List<String>) {
+data class Tile(
+        val id: Int,
+        val pixels: List<String>,
+        var left: Tile? = null,
+        var right: Tile? = null,
+        var above: Tile? = null,
+        var below: Tile? = null
+) {
 
     /**
      * Set of 4 edges
@@ -14,6 +21,20 @@ data class Tile(val id: Int, val pixels: List<String>) {
 
     fun edgesMatch(toMatch: Set<String>): Int {
         return edges.count { toMatch.contains(it) || toMatch.contains(it.reversed()) }
+    }
+
+    fun flipHorizontal() = this.copy(pixels = pixels.map { it.reversed() }.toList())
+    fun rotateClockwise(): Tile {
+        val newPixels = mutableListOf<String>()
+        for (column in 0 until pixels[0].length) {
+            val newRow = buildString {
+                for (row in pixels.indices) {
+                    this.append(pixels[row][column])
+                }
+            }
+            newPixels.add(newRow.reversed())
+        }
+        return this.copy(pixels = newPixels.toList())
     }
 
     companion object {
