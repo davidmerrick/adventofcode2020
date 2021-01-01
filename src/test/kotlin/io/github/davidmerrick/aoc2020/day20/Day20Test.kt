@@ -14,15 +14,6 @@ class Day20Test {
     }
 
     @Test
-    fun `Corner detection test`(){
-        val input = TestUtil.readText(this::class, "example.txt")
-        val tiles = input.split("\n\n").map { Tile.parse(it) }
-        val image = Image(tiles)
-        val cornerTile = tiles.first { it.id == 1951 }
-        cornerTile.countMatchedEdges(image.getOtherEdges(cornerTile.id)) shouldBe 2
-    }
-
-    @Test
     fun `Get corner tiles`(){
         val tiles = TestUtil.readText(this::class, "example.txt")
                 .split("\n\n").map { Tile.parse(it) }

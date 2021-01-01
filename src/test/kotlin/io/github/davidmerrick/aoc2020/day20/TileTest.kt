@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
 class TileTest {
 
     @Test
-    fun `Rotate tile clockwise`(){
+    fun `Rotate tile clockwise`() {
         val input = """
             Tile 1951:
             #.##...##.
@@ -28,7 +28,7 @@ class TileTest {
     }
 
     @Test
-    fun `Flip horizontally`(){
+    fun `Flip horizontally`() {
         val input = """
             Tile 1951:
             #.##...##.
@@ -48,7 +48,7 @@ class TileTest {
     }
 
     @Test
-    fun `Remove borders`(){
+    fun `Remove borders`() {
         val input = """
             Tile 1951:
             #.##...##.
@@ -67,5 +67,43 @@ class TileTest {
         noBorders.pixels.size shouldBe 8
         noBorders.pixels.first() shouldBe ".####..."
         noBorders.pixels.last() shouldBe ".#.#..#."
+    }
+
+    @Test
+    fun `Align tiles`() {
+        // Flipped and rotated version of example
+        val inputA = """
+            Tile 2311:
+            .#####..#.
+            .#.####.#.
+            #..#...###
+            #..##.#..#
+            .##.#....#
+            #.##.##...
+            ....#...#.
+            ....##.#.#
+            #.#.###.##
+            ...#.##..#
+        """.trimIndent()
+
+        val inputB = """
+            Tile 1951:
+            #.##...##.
+            #.####...#
+            .....#..##
+            #...######
+            .##.#....#
+            .###.#####
+            ###.##.##.
+            .###....#.
+            ..#.#..#.#
+            #...##.#..
+        """.trimIndent()
+
+        val a = Tile.parse(inputA)
+        val b = Tile.parse(inputB)
+
+        val aligned = a.align(b)
+        aligned.pixels.first() shouldBe "..##.#..#."
     }
 }
