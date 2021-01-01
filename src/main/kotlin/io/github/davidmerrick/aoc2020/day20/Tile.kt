@@ -19,8 +19,13 @@ data class Tile(
             pixels.last() // bottom
     )
 
-    fun edgesMatch(toMatch: Set<String>): Int {
-        return edges.count { toMatch.contains(it) || toMatch.contains(it.reversed()) }
+    fun countMatchedEdges(toMatch: Set<String>) = edges
+            .count { toMatch.contains(it) || toMatch.contains(it.reversed()) }
+
+    fun removeBorders(): Tile {
+        return this.copy(
+                pixels = pixels.subList(1, pixels.size - 1).map { it.substring(1, it.length - 1) }
+        )
     }
 
     fun flipHorizontal() = this.copy(pixels = pixels.map { it.reversed() }.toList())

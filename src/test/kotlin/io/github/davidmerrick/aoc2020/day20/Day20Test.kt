@@ -19,7 +19,7 @@ class Day20Test {
         val tiles = input.split("\n\n").map { Tile.parse(it) }
         val image = Image(tiles)
         val cornerTile = tiles.first { it.id == 1951 }
-        cornerTile.edgesMatch(image.getOtherEdges(cornerTile.id)) shouldBe 2
+        cornerTile.countMatchedEdges(image.getOtherEdges(cornerTile.id)) shouldBe 2
     }
 
     @Test
@@ -41,14 +41,5 @@ class Day20Test {
         corners.size shouldBe 4
         val result = corners.map { it.id.toLong() }.reduce { a, b -> a * b }
         println(result)
-    }
-
-    @Test
-    fun `Part 2`(){
-        // Parse tiles into an image
-        val tiles = TestUtil.readText(this::class, "part1.txt")
-                .split("\n\n").map { Tile.parse(it) }
-        val image = Image(tiles)
-
     }
 }

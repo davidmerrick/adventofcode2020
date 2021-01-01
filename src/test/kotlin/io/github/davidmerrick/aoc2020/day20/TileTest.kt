@@ -44,6 +44,28 @@ class TileTest {
         """.trimIndent()
         val tile = Tile.parse(input)
         val flipped = tile.flipHorizontal()
-        flipped.pixels[0] shouldBe ".##...##.#"
+        flipped.pixels.first() shouldBe ".##...##.#"
+    }
+
+    @Test
+    fun `Remove borders`(){
+        val input = """
+            Tile 1951:
+            #.##...##.
+            #.####...#
+            .....#..##
+            #...######
+            .##.#....#
+            .###.#####
+            ###.##.##.
+            .###....#.
+            ..#.#..#.#
+            #...##.#..
+        """.trimIndent()
+        val tile = Tile.parse(input)
+        val noBorders = tile.removeBorders()
+        noBorders.pixels.size shouldBe 8
+        noBorders.pixels.first() shouldBe ".####..."
+        noBorders.pixels.last() shouldBe ".#.#..#."
     }
 }
