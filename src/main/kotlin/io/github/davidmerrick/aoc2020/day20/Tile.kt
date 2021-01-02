@@ -5,11 +5,13 @@ import io.github.davidmerrick.aoc2020.day20.EdgeDirection.LEFT
 import io.github.davidmerrick.aoc2020.day20.EdgeDirection.RIGHT
 import io.github.davidmerrick.aoc2020.day20.EdgeDirection.TOP
 
+private const val SEA_MONSTER_WIDTH = 20
+
 data class Tile(
         val id: Int,
         val pixels: List<String>
 ) {
-    private val seaMonsterRegex = Regex("..................#.+\\n.*#....##....##....###.+\\n.*.#..#..#..#..#..#...")
+    val seaMonsterCount by lazy { countSeaMonsters() }
 
     val edges: Set<String> by lazy { edgeMap.keys.toSet() }
     private val edgeMap = mapOf(
@@ -92,14 +94,33 @@ data class Tile(
         }
     }
 
-    fun containsSeaMonsters(): Boolean {
-        val joined = pixels.joinToString("\n")
-        return seaMonsterRegex.containsMatchIn(joined)
+    fun containsSeaMonster() = seaMonsterCount > 0
+
+    private fun countSeaMonsters(): Int {
+        var count = 0
+
+
+        for (row in 0..pixels.size - 3) {
+            for (column in 0..(pixels[row].length - SEA_MONSTER_WIDTH)) {
+                if (containsSeaMonster(row, column)) {
+                    count++
+                }
+            }
+        }
+        return count
     }
 
-    fun countSeaMonsters(): Int {
-        val joined = pixels.joinToString("\n")
-        return seaMonsterRegex.findAll(joined)!!.count()
+    private fun containsSeaMonster(row: Int, column: Int): Boolean {
+        val seaMonsterRegexes = listOf(
+                Regex("..................#."),
+                Regex("#....##....##....###"),
+                Regex(".#..#..#..#..#..#...")
+        )
+        val firstRowMatches = seaMonsterRegexes[0].matches(pixels[row].substring(column, column + SEA_MONSTER_WIDTH))
+        val secondRowMatches = seaMonsterRegexes[1].matches(pixels[row + 1].substring(column, column + SEA_MONSTER_WIDTH))
+        val thirdRowMatches = seaMonsterRegexes[2].matches(pixels[row + 2].substring(column, column + SEA_MONSTER_WIDTH))
+
+        return firstRowMatches && secondRowMatches && thirdRowMatches
     }
 
     private fun rotateClockwise(times: Int): Tile {
@@ -112,28 +133,28 @@ data class Tile(
 
     fun orientToSeaMonsters(): Tile {
         return when {
-            this.containsSeaMonsters() -> {
+            this.containsSeaMonster() -> {
                 this.copy()
             }
-            this.rotateClockwise().containsSeaMonsters() -> {
+            this.rotateClockwise().containsSeaMonster() -> {
                 this.rotateClockwise()
             }
-            this.rotateClockwise(2).containsSeaMonsters() -> {
+            this.rotateClockwise(2).containsSeaMonster() -> {
                 this.rotateClockwise(2)
             }
-            this.rotateClockwise(3).containsSeaMonsters() -> {
+            this.rotateClockwise(3).containsSeaMonster() -> {
                 this.rotateClockwise(3)
             }
-            this.flipHorizontal().containsSeaMonsters() -> {
+            this.flipHorizontal().containsSeaMonster() -> {
                 this.flipHorizontal()
             }
-            this.flipHorizontal().rotateClockwise().containsSeaMonsters() -> {
+            this.flipHorizontal().rotateClockwise().containsSeaMonster() -> {
                 this.flipHorizontal().rotateClockwise()
             }
-            this.flipHorizontal().rotateClockwise(2).containsSeaMonsters() -> {
+            this.flipHorizontal().rotateClockwise(2).containsSeaMonster() -> {
                 this.flipHorizontal().rotateClockwise(2)
             }
-            this.flipHorizontal().rotateClockwise(3).containsSeaMonsters() -> {
+            this.flipHorizontal().rotateClockwise(3).containsSeaMonster() -> {
                 this.flipHorizontal().rotateClockwise(3)
             }
             else -> {

@@ -137,8 +137,8 @@ class TileTest {
             #..###....##.#...##.##.#
         """.trimIndent()
         val tile = Tile.parse(input)
-        tile.containsSeaMonsters() shouldBe true
-        tile.countSeaMonsters() shouldBe 2
+        tile.containsSeaMonster() shouldBe true
+        tile.seaMonsterCount shouldBe 2
     }
 
     @Test
@@ -171,7 +171,7 @@ class TileTest {
             ...###...##...#...#..###
         """.trimIndent()
         val tile = Tile.parse(input)
-        tile.containsSeaMonsters() shouldBe false
+        tile.containsSeaMonster() shouldBe false
     }
 
     @Test
@@ -204,6 +204,6 @@ class TileTest {
             ...###...##...#...#..###
         """.trimIndent()
         val tile = Tile.parse(input)
-        tile.orientToSeaMonsters().containsSeaMonsters() shouldBe true
+        tile.orientToSeaMonsters().containsSeaMonster() shouldBe true
     }
 }

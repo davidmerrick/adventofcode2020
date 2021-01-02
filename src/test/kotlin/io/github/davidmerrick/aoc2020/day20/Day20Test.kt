@@ -47,10 +47,10 @@ class Day20Test {
     fun `Part 2`(){
         val tiles = TestUtil.readText(this::class, "part1.txt")
                 .split("\n\n").map { Tile.parse(it) }
-        val image = TileGrid(tiles).render()
-        val count = image.orientToSeaMonsters().countSeaMonsters()
-        val seaMonsterHashes = count * 15
-        val turbulence = image.pixels.joinToString("").count { it == '#' } - seaMonsterHashes
+        val image = TileGrid(tiles).render().orientToSeaMonsters()
+        val seaMonsterHashes = image.seaMonsterCount * 15
+        val joined = image.pixels.joinToString("")
+        val turbulence = joined.count { it == '#' } - seaMonsterHashes
         println(turbulence)
     }
 }
