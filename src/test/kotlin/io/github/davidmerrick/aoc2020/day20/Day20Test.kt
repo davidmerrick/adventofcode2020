@@ -14,18 +14,10 @@ class Day20Test {
     }
 
     @Test
-    fun `Render image`(){
-        val input = TestUtil.readText(this::class, "example.txt")
-        val tiles = input.split("\n\n").map { Tile.parse(it) }
-        val image = Image(tiles)
-        image.render()
-    }
-
-    @Test
     fun `Get corner tiles`(){
         val tiles = TestUtil.readText(this::class, "example.txt")
                 .split("\n\n").map { Tile.parse(it) }
-        val image = Image(tiles)
+        val image = TileGrid(tiles)
         val corners = image.corners
         corners.size shouldBe 4
         corners.map { it.id.toLong() }.reduce { a, b -> a * b } shouldBe 20899048083289
@@ -35,7 +27,7 @@ class Day20Test {
     fun `Part 1`(){
         val tiles = TestUtil.readText(this::class, "part1.txt")
                 .split("\n\n").map { Tile.parse(it) }
-        val image = Image(tiles)
+        val image = TileGrid(tiles)
         val corners = image.corners
         corners.size shouldBe 4
         val result = corners.map { it.id.toLong() }.reduce { a, b -> a * b }
