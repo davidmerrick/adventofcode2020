@@ -1,8 +1,8 @@
 package io.github.davidmerrick.aoc2020.day20
 
-class Image(val tiles: List<Tile>) {
+class Image(private val tiles: List<Tile>) {
 
-    private val rendered: Tile by lazy { render() }
+//    private val rendered: Tile by lazy { render() }
 
     val corners: Set<Tile>
         get() = tiles.filter { it.countMatchedEdges(getOtherEdges(it.id)) == 2 }.toSet()
@@ -18,9 +18,10 @@ class Image(val tiles: List<Tile>) {
     /**
      * Render the full image into a single, large tile
      */
-    private fun render(): Tile {
+    fun render() {
         // Start a grid to place tiles
-        val grid = mutableListOf<Tile>()
+        // This guarantees that they're aligned
+        val grid = TileGrid()
         val tileQueue = tiles.toMutableList()
 
         // Seed the grid
@@ -28,30 +29,22 @@ class Image(val tiles: List<Tile>) {
         grid.add(first)
 
         // Place tiles one by one into the grid
+        var i = 0
         while (tileQueue.isNotEmpty()) {
             // Seek next tile to add to grid
-            for (tile in tileQueue) {
-                // Check if tile can be placed in grid
-                val gridEdges = grid.flatMap { it.edges }.toSet()
-                val matches = tile.countMatchedEdges(gridEdges) > 0
-                if (!matches) continue
+            i %= tileQueue.size
+            val tile = tileQueue[i]
 
-                // Find target tile
-                val target = grid.first { it.countMatchedEdges(tile.edges) > 0 }
-
-                // Align target tile
-                val newTile = tile.align(target)
-
-                // Place in grid
-
-                // Remove from queue
+            // Check if tile can be placed in grid
+            val matches = grid.tiles.any { it.countMatchedEdges(tile.edges) > 0 }
+            if (matches) {
+                grid.add(tile)
                 tileQueue.remove(tile)
-
             }
+            i++
         }
 
         // Iterate through grid, remove borders, consolidate pixels
 
-        TODO()
     }
 }

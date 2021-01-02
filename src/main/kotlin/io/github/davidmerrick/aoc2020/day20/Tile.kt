@@ -7,11 +7,7 @@ import io.github.davidmerrick.aoc2020.day20.EdgeDirection.TOP
 
 data class Tile(
         val id: Int,
-        val pixels: List<String>,
-        val left: Tile? = null,
-        val right: Tile? = null,
-        val above: Tile? = null,
-        val below: Tile? = null
+        val pixels: List<String>
 ) {
     val edges: Set<String> by lazy { edgeMap.keys.toSet() }
     val edgeMap = mapOf(

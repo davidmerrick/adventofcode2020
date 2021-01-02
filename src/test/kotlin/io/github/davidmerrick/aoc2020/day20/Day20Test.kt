@@ -14,6 +14,14 @@ class Day20Test {
     }
 
     @Test
+    fun `Render image`(){
+        val input = TestUtil.readText(this::class, "example.txt")
+        val tiles = input.split("\n\n").map { Tile.parse(it) }
+        val image = Image(tiles)
+        image.render()
+    }
+
+    @Test
     fun `Get corner tiles`(){
         val tiles = TestUtil.readText(this::class, "example.txt")
                 .split("\n\n").map { Tile.parse(it) }
