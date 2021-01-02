@@ -42,4 +42,15 @@ class Day20Test {
         val rendered = image.render().flipVertical()
         rendered.pixels.first() shouldBe ".#.#..#.##...#.##..#####"
     }
+
+    @Test
+    fun `Part 2`(){
+        val tiles = TestUtil.readText(this::class, "part1.txt")
+                .split("\n\n").map { Tile.parse(it) }
+        val image = TileGrid(tiles).render()
+        val count = image.orientToSeaMonsters().countSeaMonsters()
+        val seaMonsterHashes = count * 15
+        val turbulence = image.pixels.joinToString("").count { it == '#' } - seaMonsterHashes
+        println(turbulence)
+    }
 }

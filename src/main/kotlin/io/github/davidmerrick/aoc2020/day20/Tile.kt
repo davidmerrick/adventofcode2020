@@ -9,8 +9,10 @@ data class Tile(
         val id: Int,
         val pixels: List<String>
 ) {
+    private val seaMonsterRegex = Regex("..................#.+\\n.*#....##....##....###.+\\n.*.#..#..#..#..#..#...")
+
     val edges: Set<String> by lazy { edgeMap.keys.toSet() }
-    val edgeMap = mapOf(
+    private val edgeMap = mapOf(
             pixels.first() to TOP,
             pixels.map { it.first() }.joinToString("") to LEFT,
             pixels.map { it.last() }.joinToString("") to RIGHT,
@@ -87,6 +89,56 @@ data class Tile(
             val lines = input.split("\n")
             val id = lines[0].split(" ")[1].replace(":", "").toInt()
             return Tile(id, lines.subList(1, lines.size))
+        }
+    }
+
+    fun containsSeaMonsters(): Boolean {
+        val joined = pixels.joinToString("\n")
+        return seaMonsterRegex.containsMatchIn(joined)
+    }
+
+    fun countSeaMonsters(): Int {
+        val joined = pixels.joinToString("\n")
+        return seaMonsterRegex.findAll(joined)!!.count()
+    }
+
+    private fun rotateClockwise(times: Int): Tile {
+        var newTile = this
+        for (i in 0 until times) {
+            newTile = newTile.rotateClockwise()
+        }
+        return newTile
+    }
+
+    fun orientToSeaMonsters(): Tile {
+        return when {
+            this.containsSeaMonsters() -> {
+                this.copy()
+            }
+            this.rotateClockwise().containsSeaMonsters() -> {
+                this.rotateClockwise()
+            }
+            this.rotateClockwise(2).containsSeaMonsters() -> {
+                this.rotateClockwise(2)
+            }
+            this.rotateClockwise(3).containsSeaMonsters() -> {
+                this.rotateClockwise(3)
+            }
+            this.flipHorizontal().containsSeaMonsters() -> {
+                this.flipHorizontal()
+            }
+            this.flipHorizontal().rotateClockwise().containsSeaMonsters() -> {
+                this.flipHorizontal().rotateClockwise()
+            }
+            this.flipHorizontal().rotateClockwise(2).containsSeaMonsters() -> {
+                this.flipHorizontal().rotateClockwise(2)
+            }
+            this.flipHorizontal().rotateClockwise(3).containsSeaMonsters() -> {
+                this.flipHorizontal().rotateClockwise(3)
+            }
+            else -> {
+                throw RuntimeException("No orientation found")
+            }
         }
     }
 }
