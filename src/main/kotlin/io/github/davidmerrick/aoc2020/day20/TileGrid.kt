@@ -1,5 +1,10 @@
 package io.github.davidmerrick.aoc2020.day20
 
+import io.github.davidmerrick.aoc2020.day20.EdgeDirection.BOTTOM
+import io.github.davidmerrick.aoc2020.day20.EdgeDirection.LEFT
+import io.github.davidmerrick.aoc2020.day20.EdgeDirection.RIGHT
+import io.github.davidmerrick.aoc2020.day20.EdgeDirection.TOP
+
 /**
  * Tracks tiles in their relative orientation to each other
  */
@@ -77,5 +82,50 @@ class TileGrid(input: List<Tile>) {
                         newMap
                     }
                 }
+    }
+
+    private fun toList(): List<List<Tile>> {
+        val gridList: MutableList<List<Tile>> = mutableListOf()
+
+        // Find upper-left tile
+        var rowStart = links.asSequence().first { !it.value.containsKey(TOP) && !it.value.containsKey(LEFT) }
+        gridList.add(getRow(rowStart.key))
+
+        // Walk rows
+        while (rowStart.value.containsKey(BOTTOM)) {
+            rowStart = links.asSequence().first { it.key == rowStart.value[BOTTOM]!! }
+            gridList.add(getRow(rowStart.key))
+        }
+
+        return gridList.toList()
+    }
+
+    /**
+     * Pass in id that's start of row.
+     * This is janky af, I realize. Will likely refactor later into an iterator.
+     */
+    private fun getRow(id: Int): List<Tile> {
+        val row = mutableListOf<Tile>()
+        var currentLink = links.asSequence().first { it.key == id }
+        row.add(grid.first { it.id == currentLink.key })
+
+        while (currentLink.value.containsKey(RIGHT)) {
+            currentLink = links.asSequence().first { it.key == currentLink.value[RIGHT]!! }
+            row.add(grid.first { it.id == currentLink.key })
+        }
+        return row
+    }
+
+    fun combineTileRow(tileList: List<Tile>): List<String> {
+        return tileList.map { it.removeBorders() }
+                .reduce { a, b ->
+                    Tile(0, a.pixels.mapIndexed { i, value -> value + b.pixels[i] })
+                }.pixels
+    }
+
+    fun render(): Tile {
+        val gridList = toList()
+        val pixels = gridList.flatMap { combineTileRow(it) }
+        return Tile(0, pixels)
     }
 }

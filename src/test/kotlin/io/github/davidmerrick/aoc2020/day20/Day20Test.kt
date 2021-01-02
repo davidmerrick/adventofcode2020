@@ -33,4 +33,13 @@ class Day20Test {
         val result = corners.map { it.id.toLong() }.reduce { a, b -> a * b }
         println(result)
     }
+
+    @Test
+    fun `Part 2 example`(){
+        val tiles = TestUtil.readText(this::class, "example.txt")
+                .split("\n\n").map { Tile.parse(it) }
+        val image = TileGrid(tiles)
+        val rendered = image.render().flipVertical()
+        rendered.pixels.first() shouldBe ".#.#..#.##...#.##..#####"
+    }
 }
