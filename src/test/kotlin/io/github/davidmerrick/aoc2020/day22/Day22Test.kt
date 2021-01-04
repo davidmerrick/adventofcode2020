@@ -1,5 +1,6 @@
 package io.github.davidmerrick.aoc2020.day22
 
+import io.github.davidmerrick.aoc2020.day22.CombatGame.Companion.calculateScore
 import io.github.davidmerrick.aoc2020.testutil.TestUtil
 import io.kotlintest.matchers.collections.shouldContain
 import io.kotlintest.shouldBe
@@ -48,7 +49,7 @@ class Day22Test {
     fun `Part 2 example`() {
         val game = parseCardsPart2("example.txt")
         val winningCards = if (game.play() == 1) game.player1Cards else game.player2Cards
-        CombatGame.calculateScore(winningCards) shouldBe 291
+        calculateScore(winningCards) shouldBe 291
     }
 
     @Test
