@@ -19,8 +19,6 @@ class RecursiveCombatGame(startingCards1: List<Int>, startingCards2: List<Int>) 
             // Prevent infinite games
             if (rounds.contains(_player1Cards.toList())) {
                 return 1
-            } else if (_player1Cards.maxOrNull()!! > _player2Cards.maxOrNull()!!) {
-                return 1
             }
 
             playRound()
@@ -37,7 +35,9 @@ class RecursiveCombatGame(startingCards1: List<Int>, startingCards2: List<Int>) 
 
         // Determine whether to play subgame
         val winner = if (_player1Cards.size >= card1 && _player2Cards.size >= card2) {
-            RecursiveCombatGame(_player1Cards, _player2Cards).play()
+
+            // VERY important: Only copy a sublist less than or equal to the value of the drawn card
+            RecursiveCombatGame(_player1Cards.subList(0, card1), _player2Cards.subList(0, card2)).play()
         } else if (card1 > card2) {
             1
         } else {
