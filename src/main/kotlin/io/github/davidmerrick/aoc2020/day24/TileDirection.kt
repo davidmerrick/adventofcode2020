@@ -16,12 +16,22 @@ enum class TileDirection {
         fun opposite(of: TileDirection): TileDirection {
             return when (of) {
                 E -> W
-                NE -> SE
-                SE -> NE
+                NE -> SW
+                SE -> NW
                 W -> E
-                NW -> SW
-                SW -> NW
-                else -> throw RuntimeException("this should never happen")
+                NW -> SE
+                SW -> NE
+            }
+        }
+
+        fun adjacent(to: TileDirection): List<TileDirection> {
+            return when (to) {
+                E -> listOf(NE, SE)
+                NE -> listOf(E, NW)
+                SE -> listOf(E, SW)
+                W -> listOf(NW, SW)
+                NW -> listOf(W, NE)
+                SW -> listOf(W, SE)
             }
         }
     }
