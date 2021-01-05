@@ -1,5 +1,7 @@
 package io.github.davidmerrick.aoc2020.day24
 
+import io.github.davidmerrick.aoc2020.day20.TileGrid
+import io.github.davidmerrick.aoc2020.day24.HexGrid.Companion.move
 import io.github.davidmerrick.aoc2020.day24.TileDirection.SE
 import io.github.davidmerrick.aoc2020.day24.TileDirection.W
 import io.github.davidmerrick.aoc2020.day24.TileDirection.valueOf
@@ -19,23 +21,61 @@ class Day24Test {
     }
 
     @Test
-    fun `Part 1 example`() {
-        val directions = simplify(parseLine("esew"))
-        val referenceTile = Tile()
-        var currentTile = referenceTile
-
-        for(direction in directions){
-            currentTile = currentTile.getNeighbor(direction)
-        }
-        currentTile.flip()
-
-        currentTile.isWhite shouldBe false
-        referenceTile.getNeighbor(SE).isWhite shouldBe false
+    fun `Simplify direction test`() {
+        simplify(parseLine("esew")) shouldBe listOf(SE)
     }
 
     @Test
-    fun `Simplify direction test`(){
-        simplify(parseLine("esew")) shouldBe listOf(SE)
+    fun `Example 1, unsimplified`(){
+        val grid = HexGrid()
+        var x = 0
+        var y = 0
+        val directions = parseLine("esew")
+        for(direction in directions){
+            val delta = move(direction)
+            x += delta.first
+            y += delta.second
+        }
+        grid.flip(x, y)
+        grid.tiles.count { !it } shouldBe 1
+    }
+
+    @Test
+    fun `Example 1 full`(){
+        val grid = HexGrid()
+        val directionsList = parseInput("example.txt")
+                .map { simplify(it) }
+        for(directions in directionsList){
+            var x = 0
+            var y = 0
+            for(direction in directions){
+                val delta = move(direction)
+                x += delta.first
+                y += delta.second
+            }
+            grid.flip(x, y)
+        }
+
+        grid.tiles.count { !it } shouldBe 10
+    }
+
+    @Test
+    fun `Part 1 full`(){
+        val grid = HexGrid()
+        val directionsList = parseInput("part1.txt")
+                .map { simplify(it) }
+        for(directions in directionsList){
+            var x = 0
+            var y = 0
+            for(direction in directions){
+                val delta = move(direction)
+                x += delta.first
+                y += delta.second
+            }
+            grid.flip(x, y)
+        }
+
+        println(grid.tiles.count { !it })
     }
 
     /**
@@ -44,8 +84,8 @@ class Day24Test {
      */
     private fun simplify(directionList: List<TileDirection>): MutableList<TileDirection> {
         val newList = mutableListOf<TileDirection>()
-        for(direction in directionList){
-            if(newList.contains(TileDirection.opposite(direction))){
+        for (direction in directionList) {
+            if (newList.contains(TileDirection.opposite(direction))) {
                 newList.removeAt(newList.indexOfFirst { it == TileDirection.opposite(direction) })
             } else {
                 newList.add(direction)
