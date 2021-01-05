@@ -2,6 +2,7 @@ package io.github.davidmerrick.aoc2020.day23
 
 import io.kotlintest.matchers.collections.shouldContain
 import io.kotlintest.shouldBe
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 class Day23Test {
@@ -24,7 +25,7 @@ class Day23Test {
     fun `Part 1 full`() {
         val game = CupGame(parseCups("469217538"))
         game.play(100)
-        println(game.result.joinToString(""))
+        game.result.joinToString("") shouldBe "27956483"
     }
 
     @Test

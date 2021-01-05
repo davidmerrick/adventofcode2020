@@ -25,7 +25,7 @@ class CupGame(private val startingCups: List<Int>) {
     private fun playRound() {
         val pickedUp = getClockwiseCups(_cups.indexOf(currentCup), 3)
         _cups.removeIf { pickedUp.contains(it) }
-        val destination = findDestinationCup(currentCup, _cups.toList())
+        val destination = findDestinationCup(currentCup)
         insertCups(destination, pickedUp)
         currentCup = getNextCup()
     }
@@ -34,36 +34,42 @@ class CupGame(private val startingCups: List<Int>) {
      * Inserts cups clockwise of destination cup
      */
     private fun insertCups(destination: Int, toInsert: List<Int>) {
-        val newCups = mutableListOf<Int>()
-        newCups.addAll(_cups.subList(0, _cups.indexOf(destination) + 1))
-        newCups.addAll(toInsert)
-        newCups.addAll(_cups.subList(_cups.indexOf(destination) + 1, _cups.size))
-        _cups = newCups
+        var destinationIndex = getNextIndex(_cups.indexOf(destination))
+        for (cup in toInsert) {
+            _cups.add(destinationIndex, cup)
+            destinationIndex = getNextIndex(destinationIndex)
+        }
     }
 
     /**
      * Gets the next value of the current cup
      */
     private fun getNextCup(): Int {
-        val index = (_cups.indexOf(currentCup) + 1) % _cups.size
-        return _cups[index]
+        return _cups[getNextIndex(_cups.indexOf(currentCup))]
     }
 
-    private fun findDestinationCup(currentCup: Int, cupsList: List<Int>): Int {
+    private fun getNextIndex(index: Int): Int {
+        return (index + 1) % _cups.size
+    }
+
+    /**
+     * Note: Assumes you've removed cups first
+     */
+    private fun findDestinationCup(currentCup: Int): Int {
         var i = currentCup - 1
         while (i > 0) {
-            if (cupsList.contains(i)) return i
+            if (_cups.contains(i)) return i
             i--
         }
-        return cupsList.maxOrNull()!!
+        return _cups.maxOrNull()!!
     }
 
     private fun getClockwiseCups(startingIndex: Int, numCups: Int): List<Int> {
         val subList = mutableListOf<Int>()
-        var index = (startingIndex + 1) % _cups.size
+        var index = getNextIndex(startingIndex)
         while (subList.size < numCups) {
             subList.add(_cups[index])
-            index = (index + 1) % _cups.size
+            index = getNextIndex(index)
         }
         return subList
     }
