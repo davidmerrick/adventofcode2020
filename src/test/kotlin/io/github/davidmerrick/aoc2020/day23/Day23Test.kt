@@ -2,7 +2,6 @@ package io.github.davidmerrick.aoc2020.day23
 
 import io.kotlintest.matchers.collections.shouldContain
 import io.kotlintest.shouldBe
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 class Day23Test {
