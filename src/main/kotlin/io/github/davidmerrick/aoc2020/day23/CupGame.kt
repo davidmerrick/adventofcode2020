@@ -2,54 +2,73 @@ package io.github.davidmerrick.aoc2020.day23
 
 class CupGame(private val startingCups: List<Int>) {
 
+    private val cups = CircularLookupList()
+
+    init {
+        cups.add(startingCups.first())
+        var previousCup = startingCups.first()
+        for (cup in startingCups.subList(1, startingCups.size)) {
+            cups.addAfter(previousCup, cup)
+            previousCup = cup
+        }
+    }
+
     /**
      * Cups, in clockwise order from 1
      */
-    val result: List<Int>
-        get() = getClockwiseCups(_cups.indexOf(1), _cups.size).filterNot { it == 1 }
+    fun getResult(numItems: Int = startingCups.size): List<Int> {
+        val cupsList = mutableListOf<Int>()
+        var cup = 1
+        for (i in 0 until numItems) {
+            cup = cups.getNext(cup)
+            cupsList.add(cup)
+        }
+        return cupsList.filterNot { it == 1 }
+    }
 
-    private var _cups = startingCups.toMutableList()
-    private var currentCup: Int = _cups[0]
+    private var currentCup: Int = startingCups.first()
 
     private fun reset() {
-        _cups = startingCups.toMutableList()
-        currentCup = _cups[0]
+        currentCup = startingCups.first()
     }
 
     fun play(numRounds: Int) {
         reset()
 
-        repeat((0 until numRounds).count()) { playRound() }
+        for (i in 0 until numRounds) {
+            playRound()
+
+            if (i % 100_000 == 0) {
+                println("Played $i rounds")
+            }
+        }
     }
 
     private fun playRound() {
-        val pickedUp = getClockwiseCups(_cups.indexOf(currentCup), 3)
-        _cups.removeIf { pickedUp.contains(it) }
+        val pickedUp = pickupCups()
         val destination = findDestinationCup(currentCup)
         insertCups(destination, pickedUp)
-        currentCup = getNextCup()
+        currentCup = cups.getNext(currentCup)
+    }
+
+    /**
+     * Picks next 3 clockwise cups out, removes them from cups array, then returns them
+     */
+    private fun pickupCups(): List<Int> {
+        val pickedUp = getClockwiseCups(3)
+        pickedUp.forEach { cups.remove(it) }
+        return pickedUp
     }
 
     /**
      * Inserts cups clockwise of destination cup
      */
     private fun insertCups(destination: Int, toInsert: List<Int>) {
-        var destinationIndex = getNextIndex(_cups.indexOf(destination))
+        var addAfter = destination
         for (cup in toInsert) {
-            _cups.add(destinationIndex, cup)
-            destinationIndex = getNextIndex(destinationIndex)
+            cups.addAfter(addAfter, cup)
+            addAfter = cup
         }
-    }
-
-    /**
-     * Gets the next value of the current cup
-     */
-    private fun getNextCup(): Int {
-        return _cups[getNextIndex(_cups.indexOf(currentCup))]
-    }
-
-    private fun getNextIndex(index: Int): Int {
-        return (index + 1) % _cups.size
     }
 
     /**
@@ -58,18 +77,18 @@ class CupGame(private val startingCups: List<Int>) {
     private fun findDestinationCup(currentCup: Int): Int {
         var i = currentCup - 1
         while (i > 0) {
-            if (_cups.contains(i)) return i
+            if (cups.contains(i)) return i
             i--
         }
-        return _cups.maxOrNull()!!
+        return cups.max()
     }
 
-    private fun getClockwiseCups(startingIndex: Int, numCups: Int): List<Int> {
+    private fun getClockwiseCups(numCups: Int): List<Int> {
         val subList = mutableListOf<Int>()
-        var index = getNextIndex(startingIndex)
+        var cup = cups.getNext(currentCup)
         while (subList.size < numCups) {
-            subList.add(_cups[index])
-            index = getNextIndex(index)
+            subList.add(cup)
+            cup = cups.getNext(cup)
         }
         return subList
     }
