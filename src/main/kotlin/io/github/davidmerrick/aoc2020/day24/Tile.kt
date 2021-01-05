@@ -1,5 +1,8 @@
 package io.github.davidmerrick.aoc2020.day24
 
+import io.github.davidmerrick.aoc2020.day24.TileDirection.Companion.adjacent
+import io.github.davidmerrick.aoc2020.day24.TileDirection.Companion.relativePosition
+
 data class Tile(
         val neighbors: MutableMap<TileDirection, Tile> = mutableMapOf(),
         private var _isWhite: Boolean = true
@@ -26,12 +29,18 @@ data class Tile(
         newNeighbor.neighbors[TileDirection.opposite(direction)] = this
 
         // Add adjacent tiles as neighbors
-//        neighbors.filterKeys { it in TileDirection.adjacent(direction) }
-//                .forEach {
-//                    newNeighbor.addNeighbor(TileDirection.opposite(it.key), it.value)
-//                    it.value.addNeighbor()
-//                }
+        neighbors.filterKeys { it in adjacent(direction) }
+                .mapNotNull { it }
+                .forEach {
+                    val neighborDirection = relativePosition(direction, it.key)
+                    newNeighbor.neighbors[neighborDirection] = it.value
+                    it.value.neighbors[TileDirection.opposite(neighborDirection)] = newNeighbor
+                }
 
         return newNeighbor
+    }
+
+    override fun toString(): String {
+        return isWhite.toString()
     }
 }

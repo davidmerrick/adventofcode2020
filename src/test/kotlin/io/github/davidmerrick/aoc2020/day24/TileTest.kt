@@ -34,4 +34,15 @@ class TileTest {
         a.getNeighbor(NW) shouldBe c
         c.getNeighbor(SE) shouldBe a
     }
+
+    @Test
+    fun `Add 4 tiles, all should be neighbors`() {
+        val a = Tile()
+        val b = a.addNeighbor(E)
+        val c = b.addNeighbor(SE)
+        val d = c.addNeighbor(W)
+
+        a.getNeighbor(SW) shouldBe d
+        d.getNeighbor(NW) shouldBe a
+    }
 }

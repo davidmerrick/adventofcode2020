@@ -18,6 +18,43 @@ class Day24Test {
         directions.last().last() shouldBe W
     }
 
+    @Test
+    fun `Part 1 example`() {
+        val directions = simplify(parseLine("esew"))
+        val referenceTile = Tile()
+        var currentTile = referenceTile
+
+        for(direction in directions){
+            currentTile = currentTile.getNeighbor(direction)
+        }
+        currentTile.flip()
+
+        currentTile.isWhite shouldBe false
+        referenceTile.getNeighbor(SE).isWhite shouldBe false
+    }
+
+    @Test
+    fun `Simplify direction test`(){
+        simplify(parseLine("esew")) shouldBe listOf(SE)
+    }
+
+    /**
+     * Simplify directions so we're not crossing over any tiles
+     * i.e. a move NE cancels out a move SW
+     */
+    private fun simplify(directionList: List<TileDirection>): MutableList<TileDirection> {
+        val newList = mutableListOf<TileDirection>()
+        for(direction in directionList){
+            if(newList.contains(TileDirection.opposite(direction))){
+                newList.removeAt(newList.indexOfFirst { it == TileDirection.opposite(direction) })
+            } else {
+                newList.add(direction)
+            }
+        }
+
+        return newList
+    }
+
     private fun parseInput(fileName: String): List<List<TileDirection>> {
         return TestUtil.parseInput(this::class, fileName) { parseLine(it) }
     }
