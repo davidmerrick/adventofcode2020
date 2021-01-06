@@ -12,8 +12,11 @@ import io.github.davidmerrick.aoc2020.day24.TileDirection.W
  */
 class HexGrid {
 
-    val tiles: List<Boolean>
-        get() = _tiles.values.flatMap { it.values }
+    val tiles: List<Pair<Int, Int>>
+        get() = _tiles.flatMap { entry -> entry.value.keys.map { Pair(entry.key, it) } }
+
+    val blackTiles: List<Boolean>
+        get() = _tiles.values.flatMap { it.values }.filterNot { it }
 
     /**
      * Coordinates are combinations of east and north
@@ -36,7 +39,36 @@ class HexGrid {
         return _tiles.containsKey(x) && _tiles[x]!!.containsKey(y)
     }
 
-    fun get(x: Int, y: Int) = _tiles[x]!![y]!!
+    fun get(x: Int, y: Int): Boolean {
+        if (!tileIsSet(x, y)) {
+            add(true, x, y)
+        }
+        return _tiles[x]!![y]!!
+    }
+
+    /**
+     * Returns coordinates of neighboring tiles
+     */
+    fun getNeighbors(x: Int, y: Int): List<Pair<Int, Int>> {
+        return TileDirection.values().map {
+            val delta = move(it)
+            Pair(x + delta.first, y + delta.second)
+        }
+    }
+
+    fun shouldFlip(x: Int, y: Int): Boolean {
+        val self = get(x, y)
+        val adjacentBlackTiles = getNeighbors(x, y)
+                .map { get(it.first, it.second) }
+                .filter { !it }
+        if (!self && (adjacentBlackTiles.isEmpty() || adjacentBlackTiles.size > 2)) {
+            return true
+        }
+        if (self && adjacentBlackTiles.size == 2) {
+            return true
+        }
+        return false
+    }
 
     fun flip(x: Int, y: Int) {
         if (!tileIsSet(x, y)) {

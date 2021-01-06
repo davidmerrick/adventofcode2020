@@ -1,6 +1,5 @@
 package io.github.davidmerrick.aoc2020.day24
 
-import io.github.davidmerrick.aoc2020.day20.TileGrid
 import io.github.davidmerrick.aoc2020.day24.HexGrid.Companion.move
 import io.github.davidmerrick.aoc2020.day24.TileDirection.SE
 import io.github.davidmerrick.aoc2020.day24.TileDirection.W
@@ -26,29 +25,29 @@ class Day24Test {
     }
 
     @Test
-    fun `Example 1, unsimplified`(){
+    fun `Example 1, unsimplified`() {
         val grid = HexGrid()
         var x = 0
         var y = 0
         val directions = parseLine("esew")
-        for(direction in directions){
+        for (direction in directions) {
             val delta = move(direction)
             x += delta.first
             y += delta.second
         }
         grid.flip(x, y)
-        grid.tiles.count { !it } shouldBe 1
+        grid.blackTiles.size shouldBe 1
     }
 
     @Test
-    fun `Example 1 full`(){
+    fun `Example 1 full`() {
         val grid = HexGrid()
         val directionsList = parseInput("example.txt")
                 .map { simplify(it) }
-        for(directions in directionsList){
+        for (directions in directionsList) {
             var x = 0
             var y = 0
-            for(direction in directions){
+            for (direction in directions) {
                 val delta = move(direction)
                 x += delta.first
                 y += delta.second
@@ -56,18 +55,77 @@ class Day24Test {
             grid.flip(x, y)
         }
 
-        grid.tiles.count { !it } shouldBe 10
+        grid.blackTiles.size shouldBe 10
+    }
+
+    private fun initializePart2Grid(fileName: String): HexGrid {
+        val grid = HexGrid()
+
+        // Apply initial rule
+        val directionsList = parseInput(fileName)
+                .map { simplify(it) }
+
+        for (directions in directionsList) {
+            var x = 0
+            var y = 0
+            for (direction in directions) {
+                val delta = move(direction)
+                x += delta.first
+                y += delta.second
+            }
+            grid.flip(x, y)
+        }
+
+        return grid
     }
 
     @Test
-    fun `Part 1 full`(){
+    fun `Part 2 example`() {
+        val grid = initializePart2Grid("example.txt")
+        grid.blackTiles.size shouldBe 10
+
+        // Do flips
+        for (i in 0 until 100) {
+            val allTiles = grid.tiles.flatMap { grid.getNeighbors(it.first, it.second) }
+                    .toSet()
+                    .union(grid.tiles.toSet())
+            val toFlip = allTiles.filter { grid.shouldFlip(it.first, it.second) }
+            toFlip.forEach { grid.flip(it.first, it.second) }
+
+            println("Day $i: ${grid.blackTiles.size} black tiles")
+        }
+
+        grid.blackTiles.size shouldBe 2208
+    }
+
+    @Test
+    fun `Part 2 full`() {
+        val grid = initializePart2Grid("part1.txt")
+        grid.blackTiles.size shouldBe 326
+
+        // Do flips
+        for (i in 0 until 100) {
+            val allTiles = grid.tiles.flatMap { grid.getNeighbors(it.first, it.second) }
+                    .toSet()
+                    .union(grid.tiles.toSet())
+            val toFlip = allTiles.filter { grid.shouldFlip(it.first, it.second) }
+            toFlip.forEach { grid.flip(it.first, it.second) }
+
+            println("Day $i: ${grid.blackTiles.size} black tiles")
+        }
+
+        println(grid.blackTiles.size)
+    }
+
+    @Test
+    fun `Part 1 full`() {
         val grid = HexGrid()
         val directionsList = parseInput("part1.txt")
                 .map { simplify(it) }
-        for(directions in directionsList){
+        for (directions in directionsList) {
             var x = 0
             var y = 0
-            for(direction in directions){
+            for (direction in directions) {
                 val delta = move(direction)
                 x += delta.first
                 y += delta.second
@@ -75,7 +133,7 @@ class Day24Test {
             grid.flip(x, y)
         }
 
-        println(grid.tiles.count { !it })
+        println(grid.blackTiles.size)
     }
 
     /**
