@@ -1,28 +1,27 @@
 package io.github.davidmerrick.aoc2020.day2
 
+import io.github.davidmerrick.aoc2020.testutil.TestUtil.readLines
 import io.kotlintest.shouldBe
 import org.junit.jupiter.api.Test
 
 class PasswordValidatorTest {
 
     @Test
-    fun `Test first given inputs`(){
+    fun `Test first given inputs`() {
         val inputs = parseInput("day2.txt")
         val count = inputs.count { PasswordValidator.validate(it.first, it.second) }
         count shouldBe 2
     }
 
     @Test
-    fun `Test full inputs`(){
+    fun `Test full inputs`() {
         val inputs = parseInput("day2-full.txt")
         val count = inputs.count { PasswordValidator.validate(it.first, it.second) }
         count shouldBe 500
     }
 
-    private fun parseInput(fileName: String): List<Pair<String, PasswordRules>>{
-        return this::class.java.getResourceAsStream(fileName)
-            .bufferedReader()
-            .readLines()
+    private fun parseInput(fileName: String): List<Pair<String, PasswordRules>> {
+        return readLines(this::class, fileName)
             .map { parseLine(it) }
     }
 

@@ -1,12 +1,13 @@
 package io.github.davidmerrick.aoc2020.day3
 
+import io.github.davidmerrick.aoc2020.testutil.TestUtil.readLines
 import io.kotlintest.shouldBe
 import org.junit.jupiter.api.Test
 
 class TobogganTrajectoryTest {
 
     @Test
-    fun `Handle example 1`(){
+    fun `Handle example 1`() {
         val deltaX = 3
         val deltaY = 1
 
@@ -16,7 +17,7 @@ class TobogganTrajectoryTest {
     }
 
     @Test
-    fun `Handle example deltaX 1 deltaY 1`(){
+    fun `Handle example deltaX 1 deltaY 1`() {
         val deltaX = 1
         val deltaY = 1
 
@@ -26,7 +27,7 @@ class TobogganTrajectoryTest {
     }
 
     @Test
-    fun `Handle example deltaX 5 deltaY 1`(){
+    fun `Handle example deltaX 5 deltaY 1`() {
         val deltaX = 5
         val deltaY = 1
 
@@ -36,7 +37,7 @@ class TobogganTrajectoryTest {
     }
 
     @Test
-    fun `Handle full problem input`(){
+    fun `Handle full problem input`() {
         val deltaX = 3
         val deltaY = 1
 
@@ -47,7 +48,7 @@ class TobogganTrajectoryTest {
     }
 
     @Test
-    fun `Handle part 2 example input`(){
+    fun `Handle part 2 example input`() {
         val terrain = parseTerrain("day3.txt")
         val results = listOf(
             countTreesForTerrain(terrain, 1, 1),
@@ -61,7 +62,7 @@ class TobogganTrajectoryTest {
     }
 
     @Test
-    fun `Handle part 2 full input`(){
+    fun `Handle part 2 full input`() {
         val terrain = parseTerrain("day3-full.txt")
         val results = listOf(
             countTreesForTerrain(terrain, 1, 1),
@@ -82,7 +83,7 @@ class TobogganTrajectoryTest {
         val path = mutableListOf<TerrainType>()
         var x = 0
         var y = 0
-        while (y < terrain.height){
+        while (y < terrain.height) {
             path.add(terrain.getElementAtCoordinate(x, y))
             x += deltaX
             y += deltaY
@@ -94,13 +95,7 @@ class TobogganTrajectoryTest {
     private fun parseTerrain(
         fileName: String
     ): TobogganTerrain {
-        val input = readLines(fileName)
+        val input = readLines(this::class, fileName)
         return TobogganTerrain(input)
-    }
-
-    private fun readLines(fileName: String): List<String> {
-        return this::class.java.getResourceAsStream(fileName)
-            .bufferedReader()
-            .readLines()
     }
 }

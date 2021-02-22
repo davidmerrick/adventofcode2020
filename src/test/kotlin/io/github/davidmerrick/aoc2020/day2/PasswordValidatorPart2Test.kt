@@ -1,5 +1,6 @@
 package io.github.davidmerrick.aoc2020.day2
 
+import io.github.davidmerrick.aoc2020.testutil.TestUtil
 import io.kotlintest.shouldBe
 import org.junit.jupiter.api.Test
 
@@ -20,9 +21,7 @@ class PasswordValidatorPart2Test {
     }
 
     private fun parseInput(fileName: String): List<Pair<String, PasswordRulesPart2>>{
-        return this::class.java.getResourceAsStream(fileName)
-            .bufferedReader()
-            .readLines()
+        return TestUtil.readLines(this::class, fileName)
             .map { parseLine(it) }
     }
 

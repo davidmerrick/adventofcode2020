@@ -1,5 +1,6 @@
 package io.github.davidmerrick.aoc2020.day1
 
+import io.github.davidmerrick.aoc2020.testutil.TestUtil
 import io.kotlintest.shouldBe
 import org.junit.jupiter.api.Test
 
@@ -25,9 +26,7 @@ class ExpensesMapSolverTest {
 
 
     private fun getInputs(fileName: String): List<Int> {
-        return this::class.java.getResourceAsStream(fileName)
-            .bufferedReader()
-            .readLines()
+        return TestUtil.readLines(this::class, fileName)
             .map { it.toInt() }
     }
 }
