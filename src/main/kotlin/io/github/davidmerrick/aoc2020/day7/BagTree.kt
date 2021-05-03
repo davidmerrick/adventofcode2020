@@ -7,9 +7,7 @@ class BagTree(private val input: Map<String, Set<BagNode>>) {
     fun traverseChildCounts(bagNode: BagNode): Int {
         if (input[bagNode.color]?.isEmpty() == true) { return 0 }
 
-        return input[bagNode.color]!!
-            .map { it.count + it.count * traverseChildCounts(it) }
-            .sum()
+        return input[bagNode.color]!!.sumOf { it.count + it.count * traverseChildCounts(it) }
     }
 
     companion object {
