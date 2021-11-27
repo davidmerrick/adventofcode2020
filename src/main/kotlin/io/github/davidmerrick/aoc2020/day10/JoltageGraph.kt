@@ -18,9 +18,8 @@ class JoltageGraph(
     }
 
     fun distinctPaths(source: Int, dest: Int): Long {
-        if (source == dest) {
-            return 1L
-        }
+        if (source == dest) return 1L
+
         if (!visited.containsKey(source)) {
             visited[source] = nodes[source]!!.sumOf { distinctPaths(it, dest) }
         }
