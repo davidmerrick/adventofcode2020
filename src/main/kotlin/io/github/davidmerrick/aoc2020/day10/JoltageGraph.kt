@@ -22,9 +22,7 @@ class JoltageGraph(
             return 1L
         }
         if (!visited.containsKey(source)) {
-            visited[source] = nodes[source]!!
-                .map { distinctPaths(it, dest) }
-                .sum()
+            visited[source] = nodes[source]!!.sumOf { distinctPaths(it, dest) }
         }
 
         return visited[source]!!
